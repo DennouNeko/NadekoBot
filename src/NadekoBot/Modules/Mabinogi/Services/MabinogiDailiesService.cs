@@ -1,8 +1,8 @@
 ﻿using Discord;
 using Discord.Net;
 using Discord.WebSocket;
-using NadekoBot.Core.Services;
-using NadekoBot.Core.Services.Database.Models;
+using NadekoBot.Services;
+using NadekoBot.Services.Database.Models;
 using NadekoBot.Extensions;
 using Newtonsoft.Json;
 using NLog;

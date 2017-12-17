@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NadekoBot.Core.Services.Database.Models;
+using NadekoBot.Services.Database.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NadekoBot.Core.Services.Database.Repositories.Impl
+namespace NadekoBot.Services.Database.Repositories.Impl
 {
-    public class DailyChannelsRepository : Repository<DailyChannel>, IDailyChannels
+    public class DailyChannelsRepository : Repository<DailyChannel>, IDailyChannelsRepository
     {
         public DailyChannelsRepository(DbContext context) : base(context)
         {

@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NadekoBot.Core.Services.Database.Repositories
+namespace NadekoBot.Services.Database.Repositories
 {
-    public interface IDailyChannels : IRepository<DailyChannel>
+    public interface IDailyChannelsRepository : IRepository<DailyChannel>
     {
         IEnumerable<DailyChannel> GetAllChannels();
         void RemoveChannel(int id);
