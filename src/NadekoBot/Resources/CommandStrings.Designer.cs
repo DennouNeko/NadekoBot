@@ -2326,7 +2326,40 @@ namespace NadekoBot.Resources {
                 return ResourceManager.GetString("crstatsclear_usage", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///    Looks up a localized string similar to dailies.
+        /// </summary>
+        public static string dailies_cmd
+        {
+            get
+            {
+                return ResourceManager.GetString("dailies_cmd", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///    Looks up a localized string similar to dailies.
+        /// </summary>
+        public static string dailies_desc
+        {
+            get
+            {
+                return ResourceManager.GetString("dailies_desc", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///    Looks up a localized string similar to dailies.
+        /// </summary>
+        public static string dailies_usage
+        {
+            get
+            {
+                return ResourceManager.GetString("dailies_usage", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///    Looks up a localized string similar to danbooru.
         /// </summary>

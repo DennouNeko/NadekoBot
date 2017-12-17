@@ -1728,7 +1728,7 @@
   <data name="save_usage" xml:space="preserve">
     <value>`{0}save classical1`</value>
   </data>
-    <data name="streamrole_cmd" xml:space="preserve">
+  <data name="streamrole_cmd" xml:space="preserve">
     <value>streamrole</value>
   </data>
   <data name="streamrole_desc" xml:space="preserve">
@@ -3779,5 +3779,14 @@
   </data>
   <data name="nsfwclearcache_desc" xml:space="preserve">
     <value>Clears nsfw cache.</value>
+  </data>
+  <data name="dailies_cmd" xml:space="preserve">
+    <value>dailies</value>
+  </data>
+  <data name="dailies_desc" xml:space="preserve">
+    <value>Adds a channel to list of channels that should be notified about Mabinogi dailies.</value>
+  </data>
+  <data name="dailies_usage" xml:space="preserve">
+    <value>`{0}dailies [#channel]`</value>
   </data>
 </root>
