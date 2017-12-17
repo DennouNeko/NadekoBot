@@ -27,7 +27,7 @@ namespace NadekoBot.Services.Database
         IXpRepository Xp { get; }
         IClubRepository Clubs { get; }
         
-        IDailyChannelsRepository DailyChannel { get; }
+        IDailyChannelsRepository DailyChannels { get; }
 
         int Complete();
         Task<int> CompleteAsync();
