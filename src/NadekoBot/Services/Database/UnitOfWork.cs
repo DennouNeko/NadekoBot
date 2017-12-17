@@ -64,7 +64,7 @@ namespace NadekoBot.Services.Database
         public IClubRepository Clubs => _clubs ?? (_clubs = new ClubRepository(_context));
         
         private IDailyChannelsRepository _dailyChannels;
-        public IDailyChannelReporistory DailyChannels => _dailyChannels ?? (_dailyChannels = new DailyChannelsRepsitory(_context));
+        public IDailyChannelsReporistory DailyChannels => _dailyChannels ?? (_dailyChannels = new DailyChannelsRepsitory(_context));
 
         public UnitOfWork(NadekoContext context)
         {
