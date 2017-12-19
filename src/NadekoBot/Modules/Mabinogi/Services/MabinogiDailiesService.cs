@@ -65,7 +65,7 @@ namespace NadekoBot.Modules.Mabinogi.Services
             Translations.Add("파르홀론의 유령", "Ghost of Partholon");
             Translations.Add("포워르의 습격", "Fomor Attack");
 
-            if (DateTime.TryParse("14:45 GMT", out var dt))
+            if (DateTime.TryParse("06:45 PST", out var dt))
             {
                 dt = dt.ToUniversalTime();
                 if ((InitialInterval = dt.TimeOfDay - DateTime.UtcNow.TimeOfDay) < TimeSpan.Zero)
@@ -86,9 +86,7 @@ namespace NadekoBot.Modules.Mabinogi.Services
                 },
                 null,
                 InitialInterval,
-                //TimeSpan.FromMinutes(1),
                 TimeSpan.FromDays(1)
-                //TimeSpan.FromMinutes(10)
             );
         }
 
