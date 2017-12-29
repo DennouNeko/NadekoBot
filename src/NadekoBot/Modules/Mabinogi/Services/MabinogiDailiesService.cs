@@ -70,15 +70,11 @@ namespace NadekoBot.Modules.Mabinogi.Services
 
         private void Run()
         {
-            var PST = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
-
             var now = DateTime.UtcNow;
-            var dt = new DateTimeOffset(now.Year, now.Month, now.Day, 6, 45, 0, PST.BaseUtcOffset);
-            dt = dt.ToUniversalTime();
-
+            var dt = new DateTime(now.Year, now.Month, now.Day, now.Hour, 45, 0, DateTimeKind.Utc);
             if ((InitialInterval = dt.TimeOfDay - DateTime.UtcNow.TimeOfDay) < TimeSpan.Zero)
             {
-                InitialInterval += TimeSpan.FromDays(1);
+                InitialInterval += TimeSpan.FromHours(1);
             }
             _log.Debug("Dailies initial trigger at " + dt.ToString("yyyy-MM-dd HH:mm:ss") + " UTC");
             _log.Debug("Triggering in " + InitialInterval.TotalMinutes + " minute(s)");
@@ -89,7 +85,7 @@ namespace NadekoBot.Modules.Mabinogi.Services
             },
                 null,
                 InitialInterval,
-                TimeSpan.FromDays(1)
+                TimeSpan.FromHours(1)
             );
         }
 
@@ -113,12 +109,17 @@ namespace NadekoBot.Modules.Mabinogi.Services
 
         public async Task Trigger()
         {
+            _log.Debug("Dailies tick...");
+            var PST = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
+            var now = TimeZoneInfo.ConvertTime(DateTime.UtcNow, PST);
+
+            if (now.Hour != 6) return;
+
             //var dayString = (DateTime.UtcNow-TimeSpan.FromDays(1)).ToString("yyyy-MM-dd");
             var dayString = DateTime.UtcNow.ToString("yyyy-MM-dd");
             var dailyBaseUrl = "https://mabi-api.sigkill.kr/get_todayshadowmission/{0}?ndays=2";
             var dailyUrl = String.Format(dailyBaseUrl, dayString);
             var toSend = "🔄 I'm reminding you about dailies!";
-            _log.Info("Triggered!");
 
             var data = "";
             _log.Info("Dailies for: " + dayString);
