@@ -65,29 +65,44 @@ namespace NadekoBot.Modules.Mabinogi.Services
             Translations.Add("파르홀론의 유령", "Ghost of Partholon");
             Translations.Add("포워르의 습격", "Fomor Attack");
 
-            if (DateTime.TryParse("06:45 PST", out var dt))
+            Run();
+        }
+
+        private void Run()
+        {
+            var PST = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
+            if (DateTime.TryParse("06:45", out var dt))
             {
-                dt = dt.ToUniversalTime();
+                var dateTimeUnspec = DateTime.SpecifyKind(dt, DateTimeKind.Unspecified);
+                dt = TimeZoneInfo.ConvertTime(dateTimeUnspec, PST).ToUniversalTime();
                 if ((InitialInterval = dt.TimeOfDay - DateTime.UtcNow.TimeOfDay) < TimeSpan.Zero)
                 {
                     InitialInterval += TimeSpan.FromDays(1);
                 }
                 _log.Debug("Dailies initial trigger at " + dt.ToString("yyyy-MM-dd HH:mm:ss"));
                 _log.Debug("Triggering in " + InitialInterval.TotalMinutes + " minute(s)");
-                Run();
-            }
-        }
 
-        private void Run()
-        {
-            _t = new Timer(async (_) =>
+                _t = new Timer(async (_) =>
                 {
                     try { await Trigger().ConfigureAwait(false); } catch { }
                 },
-                null,
-                InitialInterval,
-                TimeSpan.FromDays(1)
-            );
+                    null,
+                    InitialInterval,
+                    TimeSpan.FromDays(1)
+                );
+            }
+        }
+
+        public void Reset()
+        {
+            Stop();
+            Run();
+        }
+
+        public void Stop()
+        {
+            _t.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
         public string TryTranslate(string original)
@@ -177,17 +192,6 @@ namespace NadekoBot.Modules.Mabinogi.Services
                     _log.Warn(ex);
                 }
             }
-        }
-
-        public void Reset()
-        {
-            Stop();
-            Run();
-        }
-
-        public void Stop()
-        {
-            _t.Change(Timeout.Infinite, Timeout.Infinite);
         }
     }
 
