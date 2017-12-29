@@ -73,30 +73,24 @@ namespace NadekoBot.Modules.Mabinogi.Services
             var PST = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
 
             var now = DateTime.UtcNow;
-            //var dt = new DateTime(now.Year, now.Month, now.Day, 6, 45, 0, DateTimeKind.Unspecified);
             var dt = new DateTimeOffset(now.Year, now.Month, now.Day, 6, 45, 0, PST.BaseUtcOffset);
+            dt = dt.ToUniversalTime();
 
-            //if (DateTime.TryParse("06:45", out var dt))
+            if ((InitialInterval = dt.TimeOfDay - DateTime.UtcNow.TimeOfDay) < TimeSpan.Zero)
             {
-                //var dateTimeUnspec = DateTime.SpecifyKind(dt, DateTimeKind.Unspecified);
-                //dt = TimeZoneInfo.ConvertTime(dt, PST).ToUniversalTime();
-                dt = dt.ToUniversalTime();
-                if ((InitialInterval = dt.TimeOfDay - DateTime.UtcNow.TimeOfDay) < TimeSpan.Zero)
-                {
-                    InitialInterval += TimeSpan.FromDays(1);
-                }
-                _log.Debug("Dailies initial trigger at " + dt.ToString("yyyy-MM-dd HH:mm:ss"));
-                _log.Debug("Triggering in " + InitialInterval.TotalMinutes + " minute(s)");
-
-                _t = new Timer(async (_) =>
-                {
-                    try { await Trigger().ConfigureAwait(false); } catch { }
-                },
-                    null,
-                    InitialInterval,
-                    TimeSpan.FromDays(1)
-                );
+                InitialInterval += TimeSpan.FromDays(1);
             }
+            _log.Debug("Dailies initial trigger at " + dt.ToString("yyyy-MM-dd HH:mm:ss") + " UTC");
+            _log.Debug("Triggering in " + InitialInterval.TotalMinutes + " minute(s)");
+
+            _t = new Timer(async (_) =>
+            {
+                try { await Trigger().ConfigureAwait(false); } catch { }
+            },
+                null,
+                InitialInterval,
+                TimeSpan.FromDays(1)
+            );
         }
 
         public void Reset()
