@@ -73,12 +73,14 @@ namespace NadekoBot.Modules.Mabinogi.Services
             var PST = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
 
             var now = DateTime.UtcNow;
-            var dt = new DateTime(now.Year, now.Month, now.Day, 6, 45, 0, DateTimeKind.Unspecified);
+            //var dt = new DateTime(now.Year, now.Month, now.Day, 6, 45, 0, DateTimeKind.Unspecified);
+            var dt = new DateTimeOffset(now.Year, now.Month, now.Day, 6, 45, 0, PST.BaseUtcOffset);
 
             //if (DateTime.TryParse("06:45", out var dt))
             {
                 //var dateTimeUnspec = DateTime.SpecifyKind(dt, DateTimeKind.Unspecified);
-                dt = TimeZoneInfo.ConvertTime(dt, PST).ToUniversalTime();
+                //dt = TimeZoneInfo.ConvertTime(dt, PST).ToUniversalTime();
+                dt = dt.ToUniversalTime();
                 if ((InitialInterval = dt.TimeOfDay - DateTime.UtcNow.TimeOfDay) < TimeSpan.Zero)
                 {
                     InitialInterval += TimeSpan.FromDays(1);
