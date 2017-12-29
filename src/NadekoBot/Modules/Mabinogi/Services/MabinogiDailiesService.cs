@@ -70,7 +70,7 @@ namespace NadekoBot.Modules.Mabinogi.Services
 
         private void Run()
         {
-            var PST = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var PST = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
 
             if (DateTime.TryParse("06:45", out var dt))
             {
