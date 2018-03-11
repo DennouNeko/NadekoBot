@@ -65,31 +65,39 @@ namespace NadekoBot.Modules.Mabinogi.Services
             Translations.Add("파르홀론의 유령", "Ghost of Partholon");
             Translations.Add("포워르의 습격", "Fomor Attack");
 
-            if (DateTime.TryParse("14:45 GMT", out var dt))
-            {
-                dt = dt.ToUniversalTime();
-                if ((InitialInterval = dt.TimeOfDay - DateTime.UtcNow.TimeOfDay) < TimeSpan.Zero)
-                {
-                    InitialInterval += TimeSpan.FromDays(1);
-                }
-                _log.Debug("Dailies initial trigger at " + dt.ToString("yyyy-MM-dd HH:mm:ss"));
-                _log.Debug("Triggering in " + InitialInterval.TotalMinutes + " minute(s)");
-                Run();
-            }
+            Run();
         }
 
         private void Run()
         {
+            var now = DateTime.UtcNow;
+            var dt = new DateTime(now.Year, now.Month, now.Day, now.Hour, 45, 0, DateTimeKind.Utc);
+            if ((InitialInterval = dt.TimeOfDay - DateTime.UtcNow.TimeOfDay) < TimeSpan.Zero)
+            {
+                InitialInterval += TimeSpan.FromHours(1);
+            }
+            _log.Debug("Dailies initial trigger at " + dt.ToString("yyyy-MM-dd HH:mm:ss") + " UTC");
+            _log.Debug("Triggering in " + InitialInterval.TotalMinutes + " minute(s)");
+
             _t = new Timer(async (_) =>
-                {
-                    try { await Trigger().ConfigureAwait(false); } catch { }
-                },
+            {
+                try { await Trigger().ConfigureAwait(false); } catch { }
+            },
                 null,
                 InitialInterval,
-                //TimeSpan.FromMinutes(1),
-                TimeSpan.FromDays(1)
-                //TimeSpan.FromMinutes(10)
+                TimeSpan.FromHours(1)
             );
+        }
+
+        public void Reset()
+        {
+            Stop();
+            Run();
+        }
+
+        public void Stop()
+        {
+            _t.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
         public string TryTranslate(string original)
@@ -101,12 +109,17 @@ namespace NadekoBot.Modules.Mabinogi.Services
 
         public async Task Trigger()
         {
+            _log.Debug("Dailies tick...");
+            var PST = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
+            var now = TimeZoneInfo.ConvertTime(DateTime.UtcNow, PST);
+
+            if (now.Hour != 6) return;
+
             //var dayString = (DateTime.UtcNow-TimeSpan.FromDays(1)).ToString("yyyy-MM-dd");
             var dayString = DateTime.UtcNow.ToString("yyyy-MM-dd");
             var dailyBaseUrl = "https://mabi-api.sigkill.kr/get_todayshadowmission/{0}?ndays=2";
             var dailyUrl = String.Format(dailyBaseUrl, dayString);
             var toSend = "🔄 I'm reminding you about dailies!";
-            _log.Info("Triggered!");
 
             var data = "";
             _log.Info("Dailies for: " + dayString);
@@ -179,17 +192,6 @@ namespace NadekoBot.Modules.Mabinogi.Services
                     _log.Warn(ex);
                 }
             }
-        }
-
-        public void Reset()
-        {
-            Stop();
-            Run();
-        }
-
-        public void Stop()
-        {
-            _t.Change(Timeout.Infinite, Timeout.Infinite);
         }
     }
 
